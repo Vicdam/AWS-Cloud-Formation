@@ -1,0 +1,46 @@
+Description: This template deploys a security group and ec2 instance
+
+Parameters:
+  myVPC:
+    Description: VPC used to deploy our resources below
+    Type: AWS::EC2::VPC::Id
+  PublicSubnet:
+    Description: Subnet to be used for our Web Server
+    Type: AWS::EC2::Subnet::Id
+  AMItoUse:
+    Description: AMI to use for our base image
+    Type: String
+
+Resources:
+  InstanceSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: 'Allow http to our test host'
+      VpcId: 
+        Ref: 'myVPC'
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+
+  TestInstance:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      InstanceType: t3.micro
+      ImageId: !Ref AMItoUse
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: true
+          DeviceIndex: "0"
+          GroupSet:
+            - Ref: 'InstanceSecurityGroup'
+          SubnetId:
+            Ref: 'PublicSubnet'
+      # We want a script to run automatically at the time of provisioning of the EC2 instance. In the UserData section of this EC2 server, we would deploy the Apache Web Server software that we can then use to verify that the machine correctly deployed.
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          yum update -y
+          yum install -y httpd
+          systemctl start httpd
+          systemctl enable httpd
