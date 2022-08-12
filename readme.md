@@ -3,7 +3,8 @@ This repository contains CloudFormation code for ALX-T Udacity Cloud DevOps Engi
 - The testcfn.yml file is for the deployment of a VPC (Virtual public cloud) on AWS, and it works alone
 
     in order to use the testcfn.yml, run the following code in your terminal
-    <!-- aws cloudformation create-stack --stack-name myFirstTest --region us-east-1 --template-body file://testcfn.yml -->
+    
+    aws cloudformation create-stack --stack-name myFirstTest --region us-east-1 --template-body file://testcfn.yml
 
 - The eccfn.yml has its parameters defined in the parameters.json file
 
@@ -64,6 +65,7 @@ To verify, you will use the public IP address of the newly launched EC2 instance
 Note: Use http ( not https! ), like so: http://public-ip-address
 
  in order to use the eccfn.yml, run the following code in your terminal
- <!-- aws cloudformation create-stack  --stack-name challenge1 --region us-east-1 --template-body file://eccfn.yml --parameters file://parameters.json -->
+ 
+aws cloudformation create-stack  --stack-name Eccfn --region us-east-1 --template-body file://eccfn.yml --parameters file://eccfn.json
 
  N.B: Do not forget to change the parameters in parameters.json to yours 
